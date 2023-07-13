@@ -56,7 +56,7 @@ int EDF_PWM;                        // EDF吸引時のPWM(serialで受信)
 uint8_t receive_data;               // Pythonから受信したデータ
 uint8_t mode;                       // EEのモード番号
 
-uint8_t send_data;                  // Simulinkに送信するデータ
+uint8_t send_data;                  // PCに送信するデータ
 uint8_t flag = 0;                   // EEの状態
 uint8_t sensor = 0;                 // 光センサの値
 
