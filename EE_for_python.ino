@@ -161,11 +161,6 @@ void setup() {                      // 初期化とPin番号
 
 
 void loop(){
-
-  //モータ停止
-  digitalWrite(A, HIGH);
-  digitalWrite(B, HIGH);
-
   if(Serial.available() > 0){
     data[count] = Serial.read();
     if(data[count] == ','){
