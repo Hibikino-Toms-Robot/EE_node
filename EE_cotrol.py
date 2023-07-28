@@ -40,32 +40,79 @@ class EE_Control:
                                 4:吸引動作終了
         """
 
-        def __init__(self):
-            self.ser = serial.Serial('COM6', 115200)
+        def __init__(self, PWM):
+            self.ser = serial.Serial('COM6', 115200, timeout=0.5)
+            self.pwm = PWM
+            time.sleep(2.0)
+
         
         def send_Arduino(self, mode, PWM):
+                
             PWM = format(PWM, '03')
             send_data = self.check_data(str(mode)+str(PWM))
-            # print(send_data)
-            time.sleep(2)
-            self.ser.write(send_data.encode(encoding='utf-8'))
-            receive_data = self.serial_data()
-            return (receive_data)
+            
+            try:
+                self.ser.write(send_data.encode(encoding='utf-8'))
+            except UnicodeDecodeError:
+                receive_data = ""
+
+            receive_data = self.ser.readline().strip().decode('UTF-8')　　　　　　　
+
+            return receive_data
 
         def check_data(self, send_data):
             # 語尾に','を追加する 
             if send_data[-1] != ',':
                 send_data = send_data + ','
             return send_data
+        
+        def state_0(self):
+            while True:
+                flag = self.send_Arduino(0, self.pwm)
+                if flag == "0":
+                    break
+            return flag
+        
+        def state_1(self):
+            while True:
+                flag = self.send_Arduino(1, self.pwm)
+                print(flag)
+                if flag == "1" or flag == "5":
+                    break
+            return flag
 
-
-        def serial_data(self):
-            line = self.ser.readline()
-            line_disp = line.strip().decode('UTF-8')
-            return line_disp
- 
+        def state_2(self):
+            while True:
+                flag = self.send_Arduino(2, self.pwm)
+                if flag == "2":
+                        break
+            return flag
+        
+        def state_3(self):
+            while True:
+                flag = self.send_Arduino(3, self.pwm)
+                print(flag)
+                if flag == "6" or flag == "7":
+                        break
+            return flag
+        
+        def state_4(self):
+            while True:
+                flag = self.send_Arduino(4, self.pwm)
+                if flag == "4":
+                        break
 
 '''debug'''
-EE = EE_Control()
-flag = EE.send_Arduino(0, 110)
+EE = EE_Control(110)
+
+flag = EE.state_0()
 print(flag)
+
+flag = EE.state_1()
+print(flag)
+
+# flag = EE.state_2()
+# print(flag)
+
+# flag = EE.state_3()
+# print(flag)
