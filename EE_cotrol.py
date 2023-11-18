@@ -74,7 +74,6 @@ class EE_Control:
  
 
 '''debug'''
-# pwm値は、state_1のときは180くらい。他は145くらい
 # EE = EE_Control()
 # print(EE.state_0())
 # print(EE.state_1())
