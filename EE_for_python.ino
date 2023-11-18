@@ -10,7 +10,7 @@
 #define OPTICAL 1                   // 光センサ
 #define EDF 9
 
-int CloseTime = 5000; //fingerがしまる上限時間
+int CloseTime = 6000; //fingerがしまる上限時間
 
 int optical_sensor = 0;             // 光センサの値:Analog
 int optical_sensor_cali[10];        // 光センサのしきい値のキャリブレーション用
@@ -140,7 +140,7 @@ void loop() {
         unsigned long startTime = millis();
         Serial.println("ok"); //ここでいったんPC側に文字を送信しないと、millis()- startTime>=6000が無視される。okをPCが受け取ったらは、PC側からは指令が来なくなる
         while(digitalRead(TSW)!=0){  //digitalRead(TSW)
-          if(millis()- startTime>=6000){
+          if(millis()- startTime>=CloseTime){
             break;
           }
           analogWrite(PWM, 220);
