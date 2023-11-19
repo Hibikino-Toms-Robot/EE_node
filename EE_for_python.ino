@@ -10,7 +10,7 @@
 #define OPTICAL 1                   // 光センサ
 #define EDF 9
 
-int CloseTime = 6000; //fingerがしまる上限時間
+int CloseTime = 8000; //fingerがしまる上限時間
 
 int optical_sensor = 0;             // 光センサの値:Analog
 int optical_sensor_cali[10];        // 光センサのしきい値のキャリブレーション用
@@ -19,7 +19,7 @@ int top_sw = 1;                     // TSW(Top_SW)
 int bottom_sw = 1;                  // BSW(Bottom_SW)
 
 int InitEDF_PWM = 100;              // EDF起動時のPWM
-int EDF_PWM = 220;                        // EDF吸引時のPWM(serialで受信)
+int EDF_PWM = 140;                        // EDF吸引時のPWM(serialで受信)
 
 uint8_t receive_data;               // Pythonから受信したデータ
 uint8_t mode;                       // EEのモード番号
@@ -104,7 +104,7 @@ void loop() {
         flag = 0;
         analogWrite(EDF, InitEDF_PWM);
         finger_open();
-        while(digitalRead(BSW)){
+        while(digitalRead(BSW)!=0){
           analogWrite(PWM, 210);
         }
         finger_stop();
@@ -140,7 +140,7 @@ void loop() {
         unsigned long startTime = millis();
         Serial.println("ok"); //ここでいったんPC側に文字を送信しないと、millis()- startTime>=6000が無視される。okをPCが受け取ったらは、PC側からは指令が来なくなる
         while(digitalRead(TSW)!=0){  //digitalRead(TSW)
-          if(millis()- startTime>=CloseTime){
+          if(millis()- startTime>=7000){
             break;
           }
           analogWrite(PWM, 220);
